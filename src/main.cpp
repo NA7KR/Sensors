@@ -42,27 +42,21 @@ void setup()
 
 void loop()
 {
-  delay(20000);  // Delay so sensor can stabalize
     hum = bme.readHumidity();  // Get Humidity value
     temp= bme.readTemperature();  // Get Temperature value
     press= bme.readPressure(); //Get Pressoure
-    alt= (bme.readAltitude(SEALEVELPRESSURE_HPA));
-    // Convert Humidity to string
-    str_humid = String(hum);
-    Serial.println("str_humid = " + str_humid);
-    // Convert Temperature to string
-    str_temp = String(temp);
-    Serial.println("str_temp = " + str_temp);
-    //Convert  Pressessor
-    str_press = String (press / 100.0F);
-    Serial.println("str_press = " + str_press);
-    //Convert Altitude
-    str_alt = String (alt);
-    Serial.println("str_alt = " + str_alt);
-    // Combine Humidity and Temperature and Pressure
-    str_out = str_humid + "," + str_temp + "," + str_press;
-    // Compose output character
-    const char *msg = str_out.c_str();
+    alt= (bme.readAltitude(SEALEVELPRESSURE_HPA)); //Get Pressure
+    str_humid = "humidity " + String(hum);// Convert Humidity to string
+    Serial.println(str_humid);
+    str_temp = "temperature " + String(temp); // Convert Temperature to string
+    Serial.println(str_temp);
+    str_press ="pressoure " + String (press / 100.0F); //Convert  Pressoure
+    Serial.println(str_press);
+    str_alt = "altitude " + String (alt); //Convert Altitude
+    Serial.println(str_alt);
+    str_out = str_humid + "," + str_temp + "," + str_press; // Combine Humidity, Temperature, Pressure and Altitude
+    const char *msg = str_out.c_str(); // Compose output character
     rf_driver.send((uint8_t *)msg, strlen(msg));
     rf_driver.waitPacketSent();
+    delay(20000);  // Delay so sensor can stabalize
 }
